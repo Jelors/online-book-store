@@ -1,6 +1,6 @@
-package com.springm.online_book_store.service;
+package com.springm.store.service;
 
-import com.springm.online_book_store.model.Book;
+import com.springm.store.model.Book;
 import java.util.List;
 
 public interface BookService {

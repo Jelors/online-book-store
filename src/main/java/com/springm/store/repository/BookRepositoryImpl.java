@@ -1,10 +1,10 @@
-package com.springm.online_book_store.repository;
+package com.springm.store.repository;
 
-import com.springm.online_book_store.model.Book;
+import com.springm.store.model.Book;
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

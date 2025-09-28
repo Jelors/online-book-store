@@ -1,10 +1,12 @@
-package com.springm.online_book_store.service;
+package com.springm.store.service;
 
-import com.springm.online_book_store.model.Book;
-import com.springm.online_book_store.repository.BookRepository;
+import com.springm.store.model.Book;
+import com.springm.store.repository.BookRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
