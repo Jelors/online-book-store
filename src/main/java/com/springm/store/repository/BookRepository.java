@@ -1,6 +1,5 @@
 package com.springm.store.repository;
 
-import com.springm.store.dto.BookDto;
 import com.springm.store.model.Book;
 import java.util.List;
 import java.util.Optional;
