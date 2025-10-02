@@ -2,6 +2,7 @@ package com.springm.store.service;
 
 import com.springm.store.dto.BookDto;
 import com.springm.store.dto.CreateBookRequestDto;
+import com.springm.store.exception.EntityNotFoundException;
 import com.springm.store.mapper.BookMapper;
 import com.springm.store.model.Book;
 import com.springm.store.repository.BookRepository;
@@ -22,7 +23,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public BookDto findById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + id)
+        );
+        return bookMapper.toDto(book);
+    }
+
+    @Override
     public List<BookDto> findAll() {
-        return bookRepository.findAll();
+        return bookRepository.findAll().stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }

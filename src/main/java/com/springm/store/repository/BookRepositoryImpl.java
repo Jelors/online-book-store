@@ -1,8 +1,8 @@
 package com.springm.store.repository;
 
-import com.springm.store.dto.BookDto;
 import com.springm.store.model.Book;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,12 +37,19 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<BookDto> findAll() {
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.find(Book.class, id));
+        }
+    }
+
+    @Override
+    public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
-                    "SELECT b from Book b", BookDto.class).getResultList();
+                    "SELECT b FROM Book b", Book.class).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can't find all books", e);
+            throw new RuntimeException("Can't fetch all books", e);
         }
     }
 }
