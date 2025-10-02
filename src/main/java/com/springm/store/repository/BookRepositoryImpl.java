@@ -1,21 +1,18 @@
 package com.springm.store.repository;
 
+import com.springm.store.dto.BookDto;
 import com.springm.store.model.Book;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
     private final SessionFactory sessionFactory;
-
-    @Autowired
-    public BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public Book save(Book book) {
@@ -40,10 +37,10 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<BookDto> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
-                    "SELECT b from Book b", Book.class).getResultList();
+                    "SELECT b from Book b", BookDto.class).getResultList();
         } catch (Exception e) {
             throw new RuntimeException("Can't find all books", e);
         }
