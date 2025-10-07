@@ -43,10 +43,6 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(
                         () -> new EntityNotFoundException("Book with id: " + id + " not found!"));
 
-        if (existingBook.isDeleted()) {
-            throw new EntityNotFoundException("Can't update deleted book with id: " + id);
-        }
-
         existingBook.setAuthor(changedBookDto.getAuthor());
         existingBook.setTitle(changedBookDto.getTitle());
         existingBook.setPrice(changedBookDto.getPrice());
@@ -54,9 +50,8 @@ public class BookServiceImpl implements BookService {
         existingBook.setCoverImage(changedBookDto.getCoverImage());
         existingBook.setIsbn(changedBookDto.getIsbn());
 
-        Book saved = bookRepository.save(existingBook);
-
-        return bookMapper.toDto(saved);
+        bookRepository.save(existingBook);
+        return bookMapper.toDto(existingBook);
     }
 
     @Override
