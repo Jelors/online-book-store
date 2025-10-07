@@ -36,4 +36,30 @@ public class BookServiceImpl implements BookService {
                 .map(bookMapper::toDto)
                 .toList();
     }
+
+    @Override
+    public BookDto updateBookById(Long id, BookDto changedBookDto) {
+        Book existingBook = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id: " + id + " not found!"));
+
+        if (existingBook.isDeleted()) {
+            throw new EntityNotFoundException("Can't update deleted book with id: " + id);
+        }
+
+        existingBook.setAuthor(changedBookDto.getAuthor());
+        existingBook.setTitle(changedBookDto.getTitle());
+        existingBook.setPrice(changedBookDto.getPrice());
+        existingBook.setDescription(changedBookDto.getDescription());
+        existingBook.setCoverImage(changedBookDto.getCoverImage());
+        existingBook.setIsbn(changedBookDto.getIsbn());
+
+        Book saved = bookRepository.save(existingBook);
+
+        return bookMapper.toDto(saved);
+    }
+
+    @Override
+    public void deleteBookById(Long id) {
+        bookRepository.deleteById(id);
+    }
 }
