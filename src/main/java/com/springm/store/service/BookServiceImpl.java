@@ -40,7 +40,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto updateBookById(Long id, BookDto changedBookDto) {
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id: " + id + " not found!"));
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Book with id: " + id + " not found!"));
 
         if (existingBook.isDeleted()) {
             throw new EntityNotFoundException("Can't update deleted book with id: " + id);

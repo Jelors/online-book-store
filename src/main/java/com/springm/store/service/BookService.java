@@ -2,7 +2,6 @@ package com.springm.store.service;
 
 import com.springm.store.dto.BookDto;
 import com.springm.store.dto.CreateBookRequestDto;
-import com.springm.store.model.Book;
 import java.util.List;
 
 public interface BookService {
