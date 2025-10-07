@@ -8,10 +8,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.Data;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "books")
 @Data
+@SQLRestriction("isDeleted = false")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +34,6 @@ public class Book {
     private String description;
 
     private String coverImage;
+
+    private boolean isDeleted = false;
 }
