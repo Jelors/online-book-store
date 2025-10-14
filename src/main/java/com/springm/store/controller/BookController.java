@@ -2,6 +2,7 @@ package com.springm.store.controller;
 
 import com.springm.store.dto.BookDto;
 import com.springm.store.dto.CreateBookRequestDto;
+import com.springm.store.repository.book.BookSearchParameters;
 import com.springm.store.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +40,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookDto updateBookById(
-            @PathVariable Long id,
-            @RequestBody CreateBookRequestDto bookDto
-    ) {
+    public BookDto updateBookById(@PathVariable Long id,
+                                  @RequestBody CreateBookRequestDto bookDto) {
         return bookService.updateBookById(id, bookDto);
     }
 
@@ -51,4 +50,10 @@ public class BookController {
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
     }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(BookSearchParameters searchParameters) {
+        return bookService.search(searchParameters);
+    }
+
 }
