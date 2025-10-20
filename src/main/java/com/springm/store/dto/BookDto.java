@@ -1,11 +1,11 @@
 package com.springm.store.dto;
 
-import java.math.BigDecimal;
 import com.springm.store.validation.Author;
 import com.springm.store.validation.Isbn;
 import com.springm.store.validation.Title;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,10 +19,10 @@ public class BookDto {
     private String author;
     @Isbn
     private String isbn;
+    @NotNull
     @Min(0)
     private BigDecimal price;
     @NotNull
     private String description;
-    @NotNull
     private String coverImage;
 }
