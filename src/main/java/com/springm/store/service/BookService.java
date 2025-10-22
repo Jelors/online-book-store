@@ -3,18 +3,19 @@ package com.springm.store.service;
 import com.springm.store.dto.BookDto;
 import com.springm.store.dto.CreateBookRequestDto;
 import com.springm.store.repository.book.BookSearchParameters;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
     BookDto save(CreateBookRequestDto book);
 
     BookDto findById(Long id);
 
-    List<BookDto> findAll();
+    Page<BookDto> findAll(Pageable pageable);
 
     BookDto updateBookById(Long id, CreateBookRequestDto changedBookDto);
 
     void deleteBookById(Long id);
 
-    List<BookDto> search(BookSearchParameters parameters);
+    Page<BookDto> search(BookSearchParameters parameters, Pageable pageable);
 }
