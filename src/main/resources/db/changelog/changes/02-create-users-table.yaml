@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: jelors
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: firstName
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastName
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shippingAddress
+                  type: varchar(255)
+              - column:
+                  name: is_deleted
+                  type: bit(1)
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
