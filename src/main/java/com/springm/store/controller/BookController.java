@@ -1,7 +1,7 @@
 package com.springm.store.controller;
 
-import com.springm.store.dto.BookDto;
-import com.springm.store.dto.CreateBookRequestDto;
+import com.springm.store.dto.book.BookDto;
+import com.springm.store.dto.book.CreateBookRequestDto;
 import com.springm.store.repository.book.BookSearchParameters;
 import com.springm.store.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
