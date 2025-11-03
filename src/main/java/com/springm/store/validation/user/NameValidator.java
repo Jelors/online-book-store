@@ -4,7 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class NameValidator implements ConstraintValidator<Name, String> {
-    private static final int MIN_NAME_LENGTH = 4;
+    private static final int MIN_NAME_LENGTH = 3;
 
     @Override
     public boolean isValid(String name,

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-columns-name
+      author: jelors
+      changes:
+        - renameColumn:
+            tableName: users
+            oldColumnName: firstName
+            newColumnName: first_Name
+            columnDataType: varchar(255)
+        - renameColumn:
+            tableName: users
+            oldColumnName: lastName
+            newColumnName: last_Name
+            columnDataType: varchar(255)
+        - renameColumn:
+            tableName: users
+            oldColumnName: shippingAddress
+            newColumnName: shipping_Address
+            columnDataType: varchar(255)

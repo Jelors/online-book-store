@@ -2,6 +2,7 @@ package com.springm.store.dto.user;
 
 import com.springm.store.validation.FieldMatch;
 import com.springm.store.validation.user.Email;
+import com.springm.store.validation.user.Name;
 import com.springm.store.validation.user.Password;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -28,4 +29,15 @@ public class UserRegistrationRequestDto {
     @NotBlank
     @Password
     private String repeatPassword;
+
+    @NotBlank
+    @Name
+    private String firstName;
+
+    @NotBlank
+    @Name
+    private String lastName;
+
+    @NotBlank
+    private String shippingAddress;
 }
