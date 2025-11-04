@@ -1,8 +1,7 @@
 package com.springm.store.mapper;
 
 import com.springm.store.config.MapperConfig;
-import com.springm.store.dto.user.CreateUserRequestDto;
-import com.springm.store.dto.user.UserDto;
+import com.springm.store.dto.user.UserRegistrationRequestDto;
 import com.springm.store.dto.user.UserResponseDto;
 import com.springm.store.model.User;
 import org.mapstruct.Mapper;
@@ -10,11 +9,10 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface UserMapper {
-    UserDto toDto(User user);
-
-    User toModel(CreateUserRequestDto createUserRequestDto);
+    User toModel(UserRegistrationRequestDto createUserRequestDto);
 
     UserResponseDto toUserResponse(User user);
 
-    void updateUserFromDto(CreateUserRequestDto changedUser, @MappingTarget User user);
+    void updateUserFromDto(UserRegistrationRequestDto changedUser,
+                           @MappingTarget User user);
 }

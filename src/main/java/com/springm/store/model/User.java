@@ -28,15 +28,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false,
-            name = "first_Name")
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = false,
-            name = "last_Name")
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "shipping_Address")
     private String shippingAddress;
 
     @Column(nullable = false)

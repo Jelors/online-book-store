@@ -20,17 +20,22 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: firstName
+                  name: password
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: lastName
+                  name: first_name
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: shippingAddress
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shipping_address
                   type: varchar(255)
               - column:
                   name: is_deleted
