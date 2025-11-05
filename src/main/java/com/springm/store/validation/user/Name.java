@@ -1,4 +1,4 @@
-package com.springm.store.validation;
+package com.springm.store.validation.user;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -7,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = AuthorValidator.class)
+@Constraint(validatedBy = NameValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Author {
-    String message() default "Invalid author's name length";
+public @interface Name {
+    String message() default "Invalid name length";
 
     Class<?>[] groups() default {};
 

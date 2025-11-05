@@ -1,8 +1,8 @@
 package com.springm.store.mapper;
 
 import com.springm.store.config.MapperConfig;
-import com.springm.store.dto.BookDto;
-import com.springm.store.dto.CreateBookRequestDto;
+import com.springm.store.dto.book.BookDto;
+import com.springm.store.dto.book.CreateBookRequestDto;
 import com.springm.store.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
