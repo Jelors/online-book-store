@@ -1,5 +1,6 @@
 package com.springm.store.controller;
 
+import java.util.Collection;
 import com.springm.store.dto.book.BookDto;
 import com.springm.store.dto.book.CreateBookRequestDto;
 import com.springm.store.repository.book.BookSearchParameters;
@@ -12,6 +13,9 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,13 +36,28 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     @Operation(summary = "Get all books", description = "Get a list of all available books")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Page<BookDto> findAll(@ParameterObject Pageable pageable) {
+        org.springframework.security.core.userdetails.User springUser =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal();
+
+        String email = springUser.getUsername();
+
+        Collection<? extends GrantedAuthority> authorities = springUser.getAuthorities();
+
+        System.out.println("User email: " + email);
+        authorities.forEach(auth -> System.out.println("Role: " + auth.getAuthority()));
+
         return bookService.findAll(pageable);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}")
     @Operation(summary = "Get a book by ID", description = "Get a book with specified ID")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
@@ -46,6 +65,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @Operation(summary = "Create a new book", description = "Create a new book")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
         return bookService.save(createBookRequestDto);
     }
@@ -53,6 +73,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     @Operation(summary = "Update book by ID", description = "Updates book with specified ID")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto updateBookById(@PathVariable Long id,
                                   @RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
         return bookService.updateBookById(id, createBookRequestDto);
@@ -61,6 +82,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete book by ID", description = "Deletes book with specified ID")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
     }
@@ -69,6 +91,7 @@ public class BookController {
     @GetMapping("/search")
     @Operation(summary = "Get books with parameters",
             description = "Returns a list of books with specified search parameters")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public Page<BookDto> searchBooks(@ParameterObject BookSearchParameters searchParameters,
                                      @ParameterObject Pageable pageable) {
         return bookService.search(searchParameters, pageable);

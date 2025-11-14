@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,14 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Log4j2
 public class AuthenticationController {
     private final UserService userService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/registration")
     @Operation(summary = "Register a new user", description = "Register a new user")
-    public UserResponseDto registerUser(@RequestBody @Valid
-                                        UserRegistrationRequestDto userRegistrationRequestDto) {
+    public UserResponseDto registerUser(
+            @RequestBody @Valid UserRegistrationRequestDto userRegistrationRequestDto) {
+        log.debug("User was registered.");
         return userService.register(userRegistrationRequestDto);
     }
 }

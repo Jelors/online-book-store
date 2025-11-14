@@ -14,8 +14,8 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: name
-                  type: tinyint
+                  name: role_name
+                  type: "ENUM('USER', 'ADMIN')"
                   constraints:
                     nullable: false
                     unique: true
