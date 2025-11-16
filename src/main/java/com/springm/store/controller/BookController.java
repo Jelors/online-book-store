@@ -7,15 +7,12 @@ import com.springm.store.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,19 +35,6 @@ public class BookController {
     @Operation(summary = "Get all books", description = "Get a list of all available books")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Page<BookDto> findAll(@ParameterObject Pageable pageable) {
-        org.springframework.security.core.userdetails.User springUser =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal();
-
-        String email = springUser.getUsername();
-
-        Collection<? extends GrantedAuthority> authorities = springUser.getAuthorities();
-
-        System.out.println("User email: " + email);
-        authorities.forEach(auth -> System.out.println("Role: " + auth.getAuthority()));
-
         return bookService.findAll(pageable);
     }
 
