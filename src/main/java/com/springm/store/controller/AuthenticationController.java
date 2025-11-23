@@ -41,7 +41,6 @@ public class AuthenticationController {
     @Operation(summary = "Auth user", description = "Authenticate user by email and password")
     public ResponseEntity<UserLoginResponseDto> login(
             @RequestBody @Valid UserLoginRequestDto userLoginRequestDto) {
-        log.info("User was authorized;");
         return new ResponseEntity<UserLoginResponseDto>(
                 authenticationService.authenticate(userLoginRequestDto),
                 HttpStatus.OK);
