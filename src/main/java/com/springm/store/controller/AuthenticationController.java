@@ -4,7 +4,7 @@ import com.springm.store.dto.user.UserLoginRequestDto;
 import com.springm.store.dto.user.UserLoginResponseDto;
 import com.springm.store.dto.user.UserRegistrationRequestDto;
 import com.springm.store.dto.user.UserResponseDto;
-import com.springm.store.service.AuthenticationService;
+import com.springm.store.security.service.AuthenticationService;
 import com.springm.store.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
