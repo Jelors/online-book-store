@@ -11,9 +11,9 @@ import lombok.Setter;
 public class UserLoginRequestDto {
     @NotBlank
     @Email
-    String email;
+    private String email;
 
     @NotBlank
     @Password
-    String password;
+    private String password;
 }

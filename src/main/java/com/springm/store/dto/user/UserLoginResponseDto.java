@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserLoginResponseDto {
+    private String token;
+
     public UserLoginResponseDto() {
     }
 
@@ -13,5 +15,4 @@ public class UserLoginResponseDto {
         this.token = token;
     }
 
-    String token;
 }
