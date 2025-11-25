@@ -3,18 +3,17 @@ package com.springm.store.security.service;
 import com.springm.store.dto.user.UserLoginRequestDto;
 import com.springm.store.dto.user.UserLoginResponseDto;
 import com.springm.store.security.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public UserLoginResponseDto authenticate(UserLoginRequestDto loginRequestDto) {
@@ -22,7 +21,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
         );
 
-        String token = jwtUtil.generateToken(loginRequestDto.getEmail());
+        String token = jwtUtil.generateToken(authentication.getName());
         return new UserLoginResponseDto(token);
     }
 }
