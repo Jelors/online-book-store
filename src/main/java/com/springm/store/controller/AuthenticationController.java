@@ -40,7 +40,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "Auth user", description = "Authenticate user by email and password")
     public ResponseEntity<UserLoginResponseDto> login(
-            @RequestBody UserLoginRequestDto userLoginRequestDto) {
+            @RequestBody @Valid UserLoginRequestDto userLoginRequestDto) {
         return new ResponseEntity<UserLoginResponseDto>(
                 authenticationService.authenticate(userLoginRequestDto),
                 HttpStatus.OK);
