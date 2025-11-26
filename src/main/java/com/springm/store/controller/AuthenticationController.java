@@ -1,7 +1,10 @@
 package com.springm.store.controller;
 
+import com.springm.store.dto.user.UserLoginRequestDto;
+import com.springm.store.dto.user.UserLoginResponseDto;
 import com.springm.store.dto.user.UserRegistrationRequestDto;
 import com.springm.store.dto.user.UserResponseDto;
+import com.springm.store.security.service.AuthenticationService;
 import com.springm.store.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,14 +25,25 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 public class AuthenticationController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
     @Operation(summary = "Register a new user", description = "Register a new user")
     public ResponseEntity<UserResponseDto> registerUser(
             @RequestBody @Valid UserRegistrationRequestDto userRegistrationRequestDto) {
-        log.info("User was registered.");
+        log.info("User was registered;");
         return new ResponseEntity<UserResponseDto>(
                 userService.register(userRegistrationRequestDto),
                 HttpStatus.CREATED);
     }
+
+    @PostMapping("/login")
+    @Operation(summary = "Auth user", description = "Authenticate user by email and password")
+    public ResponseEntity<UserLoginResponseDto> login(
+            @RequestBody @Valid UserLoginRequestDto userLoginRequestDto) {
+        return new ResponseEntity<UserLoginResponseDto>(
+                authenticationService.authenticate(userLoginRequestDto),
+                HttpStatus.OK);
+    }
+
 }
