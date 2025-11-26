@@ -1,4 +1,4 @@
-package com.springm.store.service;
+package com.springm.store.service.impl;
 
 import com.springm.store.dto.book.BookDto;
 import com.springm.store.dto.book.CreateBookRequestDto;
@@ -8,14 +8,15 @@ import com.springm.store.model.Book;
 import com.springm.store.repository.book.BookRepository;
 import com.springm.store.repository.book.BookSearchParameters;
 import com.springm.store.repository.book.BookSpecificationBuilder;
+import com.springm.store.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;

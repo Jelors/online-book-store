@@ -1,4 +1,4 @@
-package com.springm.store.service;
+package com.springm.store.service.impl;
 
 import com.springm.store.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
