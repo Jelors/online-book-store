@@ -11,5 +11,6 @@ public class CreateCategoryRequestDto {
     @NotNull
     @Category
     private String name;
+
     private String description;
 }

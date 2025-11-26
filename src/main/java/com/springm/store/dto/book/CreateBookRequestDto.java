@@ -14,13 +14,18 @@ import lombok.Setter;
 public class CreateBookRequestDto {
     @Title
     private String title;
+
     @Author
     private String author;
+
     @Isbn
     private String isbn;
+
     @NotNull
     @Positive
     private BigDecimal price;
+
     private String description;
+
     private String coverImage;
 }
