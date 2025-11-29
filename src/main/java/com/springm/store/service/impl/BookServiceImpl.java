@@ -5,10 +5,14 @@ import com.springm.store.dto.book.CreateBookRequestDto;
 import com.springm.store.exception.EntityNotFoundException;
 import com.springm.store.mapper.BookMapper;
 import com.springm.store.model.Book;
+import com.springm.store.model.Category;
 import com.springm.store.repository.book.BookRepository;
 import com.springm.store.repository.book.BookSearchParameters;
 import com.springm.store.repository.book.BookSpecificationBuilder;
+import com.springm.store.repository.category.CategoryRepository;
 import com.springm.store.service.BookService;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +23,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto bookRequestDto) {
         Book book = bookMapper.toModel(bookRequestDto);
-        return bookMapper.toDto(bookRepository.save(book));
+
+        Set<Category> categories = bookRequestDto.getCategoryIds().stream()
+                .map(id -> categoryRepository.findById(id)
+                        .orElseThrow(
+                                () -> new EntityNotFoundException("Category with id "
+                                        + id + " not found")))
+                .collect(Collectors.toSet());
+
+        book.setCategories(categories);
+        Book saved = bookRepository.save(book);
+
+        return bookMapper.toDto(saved);
     }
 
     @Override

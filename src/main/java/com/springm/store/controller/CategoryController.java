@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new category", description = "Create a new category")
     public ResponseEntity<CategoryDto> createCategory(
             @RequestBody @Valid CreateCategoryRequestDto categoryDto
@@ -40,6 +42,7 @@ public class CategoryController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get all categories", description = "Fetch all categories")
     public ResponseEntity<List<CategoryDto>> getAll() {
         return new ResponseEntity<List<CategoryDto>>(
@@ -49,8 +52,9 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get a category by ID", description = "Get a category with specified ID")
-    public ResponseEntity<CategoryDto> getCategoryById(Long id) {
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
         return new ResponseEntity<CategoryDto>(
                 categoryService.getById(id),
                 HttpStatus.OK
@@ -58,7 +62,11 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update category by ID", description = "Updates category with specified ID")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Update category by ID",
+            description = "Updates category with specified ID"
+    )
     public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable Long id,
             @RequestBody @Valid CreateCategoryRequestDto categoryDto
@@ -70,13 +78,18 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete category by ID", description = "Deletes category with specified ID")
+    @Operation(
+            summary = "Delete category by ID",
+            description = "Deletes category with specified ID"
+    )
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
 
     @GetMapping("/{id}/books")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(
             summary = "Get all books with specified category",
             description = "Get all books with specified category by id"
@@ -87,6 +100,5 @@ public class CategoryController {
                 HttpStatus.OK
         );
     }
-
 
 }

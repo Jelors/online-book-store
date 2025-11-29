@@ -7,7 +7,10 @@ public class CategoryValidator implements ConstraintValidator<Category, String> 
     private static final int MINIMUM_NAME_LENGTH = 4;
 
     @Override
-    public boolean isValid(String categoryName, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(
+            String categoryName,
+            ConstraintValidatorContext constraintValidatorContext
+    ) {
         return categoryName != null && categoryName.length() >= MINIMUM_NAME_LENGTH;
     }
 }

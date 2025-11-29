@@ -26,11 +26,14 @@ public interface BookMapper {
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
     @AfterMapping
-    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        Set<Long> ids = book.getCategories().stream()
-                .map(Category::getId)
-                .collect(Collectors.toSet());
+    default void setCategoryIds(@MappingTarget Object target, Book source) {
+        if (target instanceof BookDto bookDto) {
+            Set<Long> ids = source.getCategories().stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toSet());
 
-        bookDto.setCategoryIds(ids);
+            bookDto.setCategoryIds(ids);
+        }
+
     }
 }
