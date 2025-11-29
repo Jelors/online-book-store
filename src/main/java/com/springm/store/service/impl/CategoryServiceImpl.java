@@ -1,8 +1,10 @@
 package com.springm.store.service.impl;
 
+import com.springm.store.dto.book.BookDto;
 import com.springm.store.dto.category.CategoryDto;
 import com.springm.store.dto.category.CreateCategoryRequestDto;
 import com.springm.store.exception.EntityNotFoundException;
+import com.springm.store.mapper.BookMapper;
 import com.springm.store.mapper.CategoryMapper;
 import com.springm.store.model.Category;
 import com.springm.store.repository.category.CategoryRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final BookMapper bookMapper;
 
     @Override
     public List<CategoryDto> findAll() {
@@ -53,5 +56,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookDto> findAllByCategoryId(Long id) {
+        return categoryRepository.findAllByCategoryId(id).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }

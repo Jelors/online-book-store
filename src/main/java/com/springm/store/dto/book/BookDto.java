@@ -1,6 +1,5 @@
 package com.springm.store.dto.book;
 
-import com.springm.store.model.Category;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Getter;
@@ -16,5 +15,5 @@ public class BookDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    private Set<Category> categories;
+    private Set<Long> categoryIds;
 }

@@ -1,5 +1,6 @@
 package com.springm.store.service;
 
+import com.springm.store.dto.book.BookDto;
 import com.springm.store.dto.category.CategoryDto;
 import com.springm.store.dto.category.CreateCategoryRequestDto;
 import java.util.List;
@@ -14,4 +15,6 @@ public interface CategoryService {
     CategoryDto update(Long id, CreateCategoryRequestDto categoryRequestDto);
 
     void deleteById(Long id);
+
+    List<BookDto> findAllByCategoryId(Long id);
 }
