@@ -3,6 +3,7 @@ package com.springm.store.dto.book;
 import com.springm.store.validation.book.Author;
 import com.springm.store.validation.book.Isbn;
 import com.springm.store.validation.book.Title;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -30,5 +31,6 @@ public class CreateBookRequestDto {
 
     private String coverImage;
 
+    @NotEmpty
     private Set<Long> categoryIds;
 }

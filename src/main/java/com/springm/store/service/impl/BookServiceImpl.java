@@ -39,9 +39,9 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toSet());
 
         book.setCategories(categories);
-        Book saved = bookRepository.save(book);
+        bookRepository.save(book);
 
-        return bookMapper.toDto(saved);
+        return bookMapper.toDto(book);
     }
 
     @Override
