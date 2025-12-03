@@ -1,4 +1,4 @@
-package com.springm.store.service;
+package com.springm.store.service.impl;
 
 import com.springm.store.dto.user.UserRegistrationRequestDto;
 import com.springm.store.dto.user.UserResponseDto;
@@ -9,6 +9,7 @@ import com.springm.store.model.Role;
 import com.springm.store.model.User;
 import com.springm.store.repository.role.RoleRepository;
 import com.springm.store.repository.user.UserRepository;
+import com.springm.store.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
