@@ -9,12 +9,13 @@ import com.springm.store.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(componentModel = "spring")
 public interface ShoppingCartMapper {
     CartItemDto toDto(CartItem cartItem);
 
     CartItem toModel(CartRequestDto cartRequestDto);
 
-    @Mapping(source = "userId", target = "user")
+    @Mapping(source = "user.id", target = "id")
+    @Mapping(source = "user", target = "user")
     CartResponseDto toResponse(CartRequestDto cartRequestDto, User user);
 }

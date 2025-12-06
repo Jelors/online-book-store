@@ -1,10 +1,13 @@
 package com.springm.store.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.HashSet;
@@ -26,9 +29,10 @@ public class ShoppingCart {
     private long id;
 
     @OneToOne
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> cartItems = new HashSet<>();
 
     @Column(nullable = false)

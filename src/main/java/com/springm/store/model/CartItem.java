@@ -5,12 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cartItems")
+@Table(name = "cart_items")
 @Getter
 @Setter
 public class CartItem {
@@ -18,10 +20,12 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "shopping_cart_id", nullable = false)
     private ShoppingCart shoppingCart;
 
-    @Column(nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     @Column(nullable = false)
