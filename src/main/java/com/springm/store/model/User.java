@@ -55,6 +55,9 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
+
     @Column(nullable = false)
     private boolean isDeleted = false;
 
@@ -75,9 +78,4 @@ public class User implements UserDetails {
         return !isDeleted;
     }
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private ShoppingCart shoppingCart;
-    /*
-    TODO: add this column via yaml
-     */
 }

@@ -8,7 +8,6 @@ import com.springm.store.mapper.UserMapper;
 import com.springm.store.model.Role;
 import com.springm.store.model.ShoppingCart;
 import com.springm.store.model.User;
-import com.springm.store.repository.cart.CartRepository;
 import com.springm.store.repository.role.RoleRepository;
 import com.springm.store.repository.user.UserRepository;
 import com.springm.store.service.UserService;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final CartRepository cartRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 

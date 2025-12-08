@@ -1,4 +1,4 @@
-package com.springm.store.dto.cartItem;
+package com.springm.store.dto.cart.item;
 
 import java.util.Set;
 import lombok.Getter;

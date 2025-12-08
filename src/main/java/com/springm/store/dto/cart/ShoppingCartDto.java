@@ -1,7 +1,6 @@
-package com.springm.store.dto.shoppingCart;
+package com.springm.store.dto.cart;
 
 import com.springm.store.model.CartItem;
-import com.springm.store.model.User;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class ShoppingCartDto {
     private long id;
-    private User user;
+    private long userId;
     private Set<CartItem> cartItemSet;
 }
