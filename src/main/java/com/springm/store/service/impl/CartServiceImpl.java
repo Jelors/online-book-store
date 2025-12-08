@@ -2,7 +2,6 @@ package com.springm.store.service.impl;
 
 import com.springm.store.dto.shoppingCart.AddShoppingCartRequestDto;
 import com.springm.store.dto.shoppingCart.ShoppingCartDto;
-import com.springm.store.dto.shoppingCart.UpdateShoppingCartRequestDto;
 import com.springm.store.exception.EntityNotFoundException;
 import com.springm.store.mapper.ShoppingCartMapper;
 import com.springm.store.model.Book;
@@ -60,7 +59,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ShoppingCartDto updateCart(Long cartItemId, UpdateShoppingCartRequestDto requestDto) {
+    public ShoppingCartDto updateCart(Long cartItemId, AddShoppingCartRequestDto requestDto) {
         CartItem item = cartRepository.findCartItemById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Item not found!"));
 
