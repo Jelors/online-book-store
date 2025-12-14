@@ -6,10 +6,10 @@ import com.springm.store.exception.RegistrationException;
 import com.springm.store.exception.RoleNotFoundException;
 import com.springm.store.mapper.UserMapper;
 import com.springm.store.model.Role;
-import com.springm.store.model.ShoppingCart;
 import com.springm.store.model.User;
 import com.springm.store.repository.role.RoleRepository;
 import com.springm.store.repository.user.UserRepository;
+import com.springm.store.service.ShoppingCartService;
 import com.springm.store.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
@@ -44,12 +45,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(userRole));
 
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        user.setShoppingCart(shoppingCart);
+        userRepository.save(user);
+        shoppingCartService.createCartAndSetUser(user);
 
-        User savedUser = userRepository.save(user);
-
-        return userMapper.toUserResponse(savedUser);
+        return userMapper.toUserResponse(user);
     }
 }

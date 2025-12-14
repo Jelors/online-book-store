@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CartItemDto {
-    private long id;
-    private long bookId;
+    private Long id;
+    private Long bookId;
     private String bookTitle;
     private int quantity;
 }

@@ -32,4 +32,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = (User) authentication.getPrincipal();
         return user.getId();
     }
+
 }

@@ -1,7 +1,6 @@
 package com.springm.store.controller;
 
 import com.springm.store.dto.cart.AddShoppingCartRequestDto;
-import com.springm.store.dto.cart.ShoppingCartDto;
 import com.springm.store.dto.cart.ShoppingCartResponseDto;
 import com.springm.store.service.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,11 +56,11 @@ public class ShoppingCartController {
             summary = "Update already added book quantity",
             description = "Update already added book quantity"
     )
-    public ResponseEntity<ShoppingCartDto> updateCart(
+    public ResponseEntity<ShoppingCartResponseDto> updateCart(
             @PathVariable Long id,
             @RequestBody @Valid AddShoppingCartRequestDto requestDto
     ) {
-        return new ResponseEntity<ShoppingCartDto>(
+        return new ResponseEntity<ShoppingCartResponseDto>(
                 shoppingCartService.updateCart(id, requestDto),
                 HttpStatus.NO_CONTENT
         );
