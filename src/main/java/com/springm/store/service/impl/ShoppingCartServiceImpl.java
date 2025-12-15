@@ -38,9 +38,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartResponseDto addItem(AddShoppingCartRequestDto requestDto) {
         ShoppingCart cart = getCurrentUserCart();
+        Long bookId = requestDto.getBookId();
 
-        Book book = bookRepository.findById(requestDto.getBookId())
-                .orElseThrow(() -> new EntityNotFoundException("Book not found"));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Book with id " + bookId + " not found!"
+                ));
 
         Optional<CartItem> existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getBook().getId().equals(book.getId()))

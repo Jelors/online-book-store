@@ -1,7 +1,7 @@
 package com.springm.store.dto.cart;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 public class AddShoppingCartRequestDto {
     @NotNull
+    @Positive
     private Long bookId;
 
-    @Min(0)
+    @Positive
     private int quantity;
 }
