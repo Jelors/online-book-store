@@ -9,6 +9,7 @@ import com.springm.store.model.Role;
 import com.springm.store.model.User;
 import com.springm.store.repository.role.RoleRepository;
 import com.springm.store.repository.user.UserRepository;
+import com.springm.store.service.ShoppingCartService;
 import com.springm.store.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
@@ -43,6 +45,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(userRole));
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        userRepository.save(user);
+        shoppingCartService.createCartAndSetUser(user);
+
+        return userMapper.toUserResponse(user);
     }
 }
