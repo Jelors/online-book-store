@@ -29,6 +29,9 @@ public class Order {
     private User user;
 
     @Column(nullable = false)
+    private Status status;
+
+    @Column(nullable = false)
     private BigDecimal total;
 
     @Column(nullable = false)
@@ -39,4 +42,11 @@ public class Order {
 
     private Set<OrderItem> orderItems;
 
+
+    public enum Status {
+        ORDER_PLACED,
+        PENDING,
+        DELIVERED,
+        COMPLETED
+    }
 }
