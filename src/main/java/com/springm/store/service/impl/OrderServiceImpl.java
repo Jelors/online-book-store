@@ -1,27 +1,84 @@
 package com.springm.store.service.impl;
 
 import com.springm.store.dto.order.OrderResponseDto;
+import com.springm.store.exception.EntityNotFoundException;
+import com.springm.store.mapper.CartItemMapper;
+import com.springm.store.mapper.OrderItemMapper;
+import com.springm.store.mapper.OrderMapper;
 import com.springm.store.model.Order;
+import com.springm.store.model.OrderItem;
+import com.springm.store.model.ShoppingCart;
+import com.springm.store.model.User;
+import com.springm.store.repository.cart.ShoppingCartRepository;
+import com.springm.store.repository.order.OrderRepository;
+import com.springm.store.repository.user.UserRepository;
 import com.springm.store.service.OrderService;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+    private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
+    private final CartItemMapper cartItemMapper;
+    private final UserDetailsServiceImpl userDetailsService;
+
     @Override
     public boolean placeOrder(String shippingAddress) {
-        return false;
+        User user = userDetailsService.getCurrentUser();
+        ShoppingCart cart = shoppingCartRepository.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException(user.getUsername() + " cart not found!"));
+
+        if (cart.getCartItems().isEmpty()) {
+            return false;
+        }
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setShippingAddress(shippingAddress);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(Order.Status.ORDER_PLACED);
+
+        Set<OrderItem> orderItems = cart.getCartItems().stream()
+                .map(cartItemMapper::toDto)
+                .map(orderItemMapper::toOrderItemDto)
+                .map(orderItemMapper::toOrderItemModel)
+                .collect(Collectors.toSet());
+
+        order.setOrderItems(orderItems);
+        orderRepository.save(order);
+
+        cart.clear();
+        shoppingCartRepository.save(cart);
+
+        return true;
     }
 
     @Override
     public List<OrderResponseDto> receiveOrderHistory() {
-        return List.of();
+        User user = userDetailsService.getCurrentUser();
+        return orderRepository.findByUser(user).stream()
+                .map(orderMapper::toResponseDto)
+                .toList();
     }
 
     @Override
     public OrderResponseDto updateOrderStatus(Long orderId, Order.Status orderStatus) {
-        return null;
+        Order order = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order with id " + orderId + " not found!"
+                ));
+        order.setStatus(orderStatus);
+        return orderMapper.toResponseDto(orderRepository.save(order));
     }
 }
