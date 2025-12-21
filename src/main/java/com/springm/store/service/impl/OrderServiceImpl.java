@@ -11,7 +11,6 @@ import com.springm.store.model.ShoppingCart;
 import com.springm.store.model.User;
 import com.springm.store.repository.cart.ShoppingCartRepository;
 import com.springm.store.repository.order.OrderRepository;
-import com.springm.store.repository.user.UserRepository;
 import com.springm.store.service.OrderService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderMapper orderMapper;
@@ -34,13 +32,13 @@ public class OrderServiceImpl implements OrderService {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    public boolean placeOrder(String shippingAddress) {
+    public OrderResponseDto placeOrder(String shippingAddress) {
         User user = userDetailsService.getCurrentUser();
         ShoppingCart cart = shoppingCartRepository.findByUser(user)
                 .orElseThrow(() -> new EntityNotFoundException(user.getUsername() + " cart not found!"));
 
         if (cart.getCartItems().isEmpty()) {
-            return false;
+            throw new IllegalArgumentException("Order can't be empty!");
         }
 
         Order order = new Order();
@@ -61,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         cart.clear();
         shoppingCartRepository.save(cart);
 
-        return true;
+        return orderMapper.toResponseDto(order);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto updateOrderStatus(Long orderId, Order.Status orderStatus) {
-        Order order = orderRepository.findByOrderId(orderId)
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Order with id " + orderId + " not found!"
                 ));

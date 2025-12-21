@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public User getCurrentUser() {
         Long userId = getCurrentUserId();
-        return userRepository.findByUserId(userId)
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(
                         "User with id " + userId + " not found!"
                 ));

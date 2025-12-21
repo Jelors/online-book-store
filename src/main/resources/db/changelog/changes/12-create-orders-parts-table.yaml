@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-categories-table
+      author: jelors
+      changes:
+        - createTable:
+            tableName: orders_parts
+            columns:
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: order_item_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: orders_parts
+            baseColumnNames: order_id
+            referencedTableName: orders
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_orders_parts_order
+
+        - addForeignKeyConstraint:
+            baseTableName: orders_parts
+            baseColumnNames: order_item_id
+            referencedTableName: order_items
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_orders_parts_order_item
+
+        - addUniqueConstraint:
+            tableName: orders_parts
+            columnNames: order_id, order_item_id
+            constraintName: uk_orders_parts_unique

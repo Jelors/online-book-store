@@ -5,7 +5,7 @@ import com.springm.store.model.Order;
 import java.util.List;
 
 public interface OrderService {
-    boolean placeOrder(String shippingAddress);
+    OrderResponseDto placeOrder(String shippingAddress);
 
     List<OrderResponseDto> receiveOrderHistory();
 
