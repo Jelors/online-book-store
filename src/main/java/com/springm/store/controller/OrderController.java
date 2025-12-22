@@ -1,7 +1,7 @@
 package com.springm.store.controller;
 
 import com.springm.store.dto.order.OrderResponseDto;
-import com.springm.store.model.Order;
+import com.springm.store.dto.order.UpdateOrderStatusDto;
 import com.springm.store.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +40,7 @@ public class OrderController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Receive orders history", description = "Receive orders history")
-    public ResponseEntity<List<OrderResponseDto>> getAll() {
+    public ResponseEntity<List<OrderResponseDto>> getOrderHistory() {
         return new ResponseEntity<List<OrderResponseDto>>(
                 orderService.receiveOrderHistory(),
                 HttpStatus.OK
@@ -55,13 +55,12 @@ public class OrderController {
     )
     public ResponseEntity<OrderResponseDto> updateStatus(
             @PathVariable Long id,
-            @RequestBody Order.Status orderStatus
+            @RequestBody UpdateOrderStatusDto orderStatusDto
     ) {
         return new ResponseEntity<OrderResponseDto>(
-                orderService.updateOrderStatus(id, orderStatus),
+                orderService.updateOrderStatus(id, orderStatusDto),
                 HttpStatus.NO_CONTENT
         );
     }
-
 
 }

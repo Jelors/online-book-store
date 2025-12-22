@@ -11,12 +11,20 @@ import org.mapstruct.Mapping;
 public interface OrderItemMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "order", ignore = true)
+    @Mapping(source = "bookId", target = "bookId")
+    @Mapping(source = "bookTitle", target = "bookTitle")
+    @Mapping(source = "quantity", target = "quantity")
+    @Mapping(source = "price", target = "price")
     OrderItemDto toDtoFromCart(CartItemDto cartItemDto);
 
-    @Mapping(source = "price", target = "price")
     @Mapping(source = "bookId", target = "book.id")
+    @Mapping(source = "bookTitle", target = "book.title")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "quantity", target = "quantity")
     OrderItem toModel(OrderItemDto orderItemDto);
 
+    @Mapping(source = "book.id", target = "bookId")
+    @Mapping(source = "book.title", target = "bookTitle")
     OrderItemDto toDto(OrderItem orderItem);
+
 }

@@ -38,6 +38,3 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal price;
 }
-
-// TODO: дофіксить залупу book_title, якась помилка якщо знов ордер плейсить на рахунок статусів;
-// TODO: непонятка з отриманням окремих ітемів в ордері і ордерс хісторі пустий якогось хуя.

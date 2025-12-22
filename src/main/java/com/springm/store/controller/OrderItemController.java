@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderItemController {
     private final OrderItemService orderItemService;
 
-
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<OrderItemDto>> getOrderItems(@PathVariable Long orderId) {
@@ -27,7 +26,6 @@ public class OrderItemController {
                 HttpStatus.OK
         );
     }
-
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

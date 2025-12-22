@@ -13,8 +13,8 @@ import lombok.Setter;
 public class OrderResponseDto {
     private Long id;
     private Long userId;
-    private List<OrderItemDto> orderItems;
     private LocalDateTime orderDate;
     private BigDecimal total;
     private Order.Status orderStatus;
+    private List<OrderItemDto> orderItems;
 }

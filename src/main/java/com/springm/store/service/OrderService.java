@@ -1,7 +1,7 @@
 package com.springm.store.service;
 
 import com.springm.store.dto.order.OrderResponseDto;
-import com.springm.store.model.Order;
+import com.springm.store.dto.order.UpdateOrderStatusDto;
 import java.util.List;
 
 public interface OrderService {
@@ -9,6 +9,6 @@ public interface OrderService {
 
     List<OrderResponseDto> receiveOrderHistory();
 
-    OrderResponseDto updateOrderStatus(Long orderId, Order.Status orderStatus);
+    OrderResponseDto updateOrderStatus(Long orderId, UpdateOrderStatusDto orderStatus);
 
 }

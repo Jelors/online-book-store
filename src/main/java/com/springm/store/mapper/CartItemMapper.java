@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface CartItemMapper {
 
     @Mapping(source = "book.id", target = "bookId")
+    @Mapping(source = "book.title", target = "bookTitle")
     CartItemDto toDto(CartItem cartItem);
 
     CartItem toModel(CartItemDto cartItemDto);

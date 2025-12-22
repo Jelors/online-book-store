@@ -1,6 +1,7 @@
 package com.springm.store.service.impl;
 
 import com.springm.store.dto.order.OrderResponseDto;
+import com.springm.store.dto.order.UpdateOrderStatusDto;
 import com.springm.store.exception.EntityNotFoundException;
 import com.springm.store.mapper.CartItemMapper;
 import com.springm.store.mapper.OrderItemMapper;
@@ -36,7 +37,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto placeOrder(String shippingAddress) {
         User user = userDetailsService.getCurrentUser();
         ShoppingCart cart = shoppingCartRepository.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException(user.getUsername() + " cart not found!"));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        user.getUsername() + " cart not found!"
+                ));
 
         if (cart.getCartItems().isEmpty()) {
             throw new IllegalArgumentException("Order can't be empty!");
@@ -80,12 +83,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDto updateOrderStatus(Long orderId, Order.Status orderStatus) {
+    public OrderResponseDto updateOrderStatus(Long orderId, UpdateOrderStatusDto orderStatus) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Order with id " + orderId + " not found!"
                 ));
-        order.setStatus(orderStatus);
+        order.setStatus(orderStatus.getStatus());
         return orderMapper.toResponseDto(orderRepository.save(order));
     }
 }
