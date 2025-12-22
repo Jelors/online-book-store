@@ -12,6 +12,7 @@ import com.springm.store.model.User;
 import com.springm.store.repository.cart.ShoppingCartRepository;
 import com.springm.store.repository.order.OrderRepository;
 import com.springm.store.service.OrderService;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -49,15 +50,23 @@ public class OrderServiceImpl implements OrderService {
 
         Set<OrderItem> orderItems = cart.getCartItems().stream()
                 .map(cartItemMapper::toDto)
-                .map(orderItemMapper::toOrderItemDto)
-                .map(orderItemMapper::toOrderItemModel)
+                .map(orderItemMapper::toDtoFromCart)
+                .map(orderItemMapper::toModel)
+                .peek(item -> item.setOrder(order))
                 .collect(Collectors.toSet());
-
         order.setOrderItems(orderItems);
-        orderRepository.save(order);
 
         cart.clear();
         shoppingCartRepository.save(cart);
+
+        BigDecimal totalPrice = orderItems.stream()
+                .map(item -> {
+                    BigDecimal price = item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO;
+                    return price.multiply(BigDecimal.valueOf(item.getQuantity()));
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        order.setTotal(totalPrice);
+        orderRepository.save(order);
 
         return orderMapper.toResponseDto(order);
     }

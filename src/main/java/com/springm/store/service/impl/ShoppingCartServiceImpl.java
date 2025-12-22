@@ -56,6 +56,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         } else {
             CartItem item = new CartItem();
             item.setBook(book);
+            item.setPrice(book.getPrice());
             item.setQuantity(requestDto.getQuantity());
             item.setShoppingCart(cart);
             cart.getCartItems().add(item);

@@ -1,5 +1,6 @@
 package com.springm.store.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +25,7 @@ public class OrderItem {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private Order order;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -36,3 +38,6 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal price;
 }
+
+// TODO: дофіксить залупу book_title, якась помилка якщо знов ордер плейсить на рахунок статусів;
+// TODO: непонятка з отриманням окремих ітемів в ордері і ордерс хісторі пустий якогось хуя.
