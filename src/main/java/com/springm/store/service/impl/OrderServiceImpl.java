@@ -2,6 +2,7 @@ package com.springm.store.service.impl;
 
 import com.springm.store.dto.order.OrderResponseDto;
 import com.springm.store.dto.order.UpdateOrderStatusDto;
+import com.springm.store.dto.order.item.OrderItemDto;
 import com.springm.store.exception.EntityNotFoundException;
 import com.springm.store.mapper.CartItemMapper;
 import com.springm.store.mapper.OrderItemMapper;
@@ -12,6 +13,7 @@ import com.springm.store.model.ShoppingCart;
 import com.springm.store.model.User;
 import com.springm.store.repository.cart.ShoppingCartRepository;
 import com.springm.store.repository.order.OrderRepository;
+import com.springm.store.repository.order.item.OrderItemRepository;
 import com.springm.store.service.OrderService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
@@ -90,5 +93,20 @@ public class OrderServiceImpl implements OrderService {
                 ));
         order.setStatus(orderStatus.getStatus());
         return orderMapper.toResponseDto(orderRepository.save(order));
+    }
+
+    @Override
+    public List<OrderItemDto> getItemsByOrderId(Long orderId) {
+        return orderItemRepository.findByOrderId(orderId)
+                .stream()
+                .map(orderItemMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public OrderItemDto getItemByOrderIdAndItemId(Long orderId, Long itemId) {
+        return orderItemRepository.findByOrderIdAndId(orderId, itemId)
+                .map(orderItemMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Item not found"));
     }
 }

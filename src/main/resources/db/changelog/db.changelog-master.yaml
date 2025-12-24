@@ -21,5 +21,3 @@ databaseChangeLog:
       file: db/changelog/changes/10-create-orders-table.yaml
   - include:
       file: db/changelog/changes/11-create-order-items-table.yaml
-  - include:
-      file: db/changelog/changes/12-create-orders-parts-table.yaml

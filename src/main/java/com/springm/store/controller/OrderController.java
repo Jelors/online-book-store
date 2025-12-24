@@ -2,6 +2,7 @@ package com.springm.store.controller;
 
 import com.springm.store.dto.order.OrderResponseDto;
 import com.springm.store.dto.order.UpdateOrderStatusDto;
+import com.springm.store.dto.order.item.OrderItemDto;
 import com.springm.store.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,6 +61,25 @@ public class OrderController {
         return new ResponseEntity<OrderResponseDto>(
                 orderService.updateOrderStatus(id, orderStatusDto),
                 HttpStatus.NO_CONTENT
+        );
+    }
+
+    @GetMapping("/orders/{orderId}/items")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<OrderItemDto>> getOrderItems(@PathVariable Long orderId) {
+        return new ResponseEntity<List<OrderItemDto>>(
+                orderService.getItemsByOrderId(orderId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/orders/{orderId}/items/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<OrderItemDto> getOrderItem(@PathVariable Long orderId,
+                                                     @PathVariable Long id) {
+        return new ResponseEntity<OrderItemDto>(
+                orderService.getItemByOrderIdAndItemId(orderId, id),
+                HttpStatus.OK
         );
     }
 

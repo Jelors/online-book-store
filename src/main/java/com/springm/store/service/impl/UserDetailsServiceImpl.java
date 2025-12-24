@@ -1,6 +1,6 @@
 package com.springm.store.service.impl;
 
-import com.springm.store.exception.UserNotFoundException;
+import com.springm.store.exception.EntityNotFoundException;
 import com.springm.store.model.User;
 import com.springm.store.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public User getCurrentUser() {
         Long userId = getCurrentUserId();
         return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(
+                .orElseThrow(() -> new EntityNotFoundException(
                         "User with id " + userId + " not found!"
                 ));
     }
