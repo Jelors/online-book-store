@@ -1,5 +1,6 @@
 package com.springm.store.controller;
 
+import com.springm.store.dto.order.AddShippingAddressDto;
 import com.springm.store.dto.order.OrderResponseDto;
 import com.springm.store.dto.order.UpdateOrderStatusDto;
 import com.springm.store.dto.order.item.OrderItemDto;
@@ -30,7 +31,7 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Place an order", description = "Place an order")
     public ResponseEntity<OrderResponseDto> placeOrder(
-            @RequestBody String shippingAddress
+            @RequestBody AddShippingAddressDto shippingAddress
     ) {
         return new ResponseEntity<OrderResponseDto>(
                 orderService.placeOrder(shippingAddress),
@@ -64,7 +65,7 @@ public class OrderController {
         );
     }
 
-    @GetMapping("/orders/{orderId}/items")
+    @GetMapping("/{orderId}/items")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<OrderItemDto>> getOrderItems(@PathVariable Long orderId) {
         return new ResponseEntity<List<OrderItemDto>>(
@@ -73,7 +74,7 @@ public class OrderController {
         );
     }
 
-    @GetMapping("/orders/{orderId}/items/{id}")
+    @GetMapping("/{orderId}/items/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<OrderItemDto> getOrderItem(@PathVariable Long orderId,
                                                      @PathVariable Long id) {

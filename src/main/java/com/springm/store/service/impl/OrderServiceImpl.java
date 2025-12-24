@@ -1,5 +1,6 @@
 package com.springm.store.service.impl;
 
+import com.springm.store.dto.order.AddShippingAddressDto;
 import com.springm.store.dto.order.OrderResponseDto;
 import com.springm.store.dto.order.UpdateOrderStatusDto;
 import com.springm.store.dto.order.item.OrderItemDto;
@@ -37,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    public OrderResponseDto placeOrder(String shippingAddress) {
+    public OrderResponseDto placeOrder(AddShippingAddressDto shippingAddressDto) {
         User user = userDetailsService.getCurrentUser();
         ShoppingCart cart = shoppingCartRepository.findByUser(user)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setShippingAddress(shippingAddress);
+        order.setShippingAddress(shippingAddressDto.getShippingAddress());
         order.setOrderDate(LocalDateTime.now());
         order.setStatus(Order.Status.ORDER_PLACED);
 
