@@ -4,7 +4,7 @@ databaseChangeLog:
       author: jelors
       changes:
         - createTable:
-            tableName: cart_items
+            tableName: order_items
             columns:
               - column:
                   name: id
@@ -15,19 +15,19 @@ databaseChangeLog:
                     nullable: false
 
               - column:
-                  name: shopping_cart_id
+                  name: order_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_cart_items_shopping_cart
-                    references: shopping_carts(id)
+                    foreignKeyName: fk_order_items_order
+                    references: orders(id)
 
               - column:
                   name: book_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_cart_items_book
+                    foreignKeyName: fk_order_items_book
                     references: books(id)
 
               - column:
@@ -35,6 +35,7 @@ databaseChangeLog:
                   type: INT
                   constraints:
                     nullable: false
+
               - column:
                   name: price
                   type: decimal

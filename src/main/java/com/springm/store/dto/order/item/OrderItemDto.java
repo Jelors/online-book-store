@@ -1,4 +1,4 @@
-package com.springm.store.dto.cart.item;
+package com.springm.store.dto.order.item;
 
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CartItemDto {
+public class OrderItemDto {
     private Long id;
     private Long bookId;
     private String bookTitle;
