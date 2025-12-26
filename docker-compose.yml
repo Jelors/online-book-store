@@ -1,0 +1,55 @@
+services:
+  mysqldb:
+    image: mysql:9.5.0
+    container_name: mysqldb
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQLDB_DATABASE}
+
+    ports:
+      - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - bookstore-network
+
+  app:
+    image: bookstore
+    build: .
+    container_name: bookstore
+    depends_on:
+      - mysqldb
+
+    ports:
+      - "${APP_LOCAL_PORT}:${APP_DOCKER_PORT}"
+      - "${DEBUG_PORT}:${DEBUG_PORT}"
+
+    env_file:
+      - .env
+
+    environment:
+      SPRING_APPLICATION_JSON: '{
+              "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE",
+              "spring.datasource.username" : "$MYSQLDB_USERNAME",
+              "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+              "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQLDialect"
+            }'
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    networks:
+       - bookstore-network
+
+volumes:
+  mysql_data:
+networks:
+  bookstore-network:
+    driver: bridge
