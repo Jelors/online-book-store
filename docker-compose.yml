@@ -46,7 +46,7 @@ services:
             }'
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
     networks:
-       - bookstore-network
+      - bookstore-network
 
 volumes:
   mysql_data:
