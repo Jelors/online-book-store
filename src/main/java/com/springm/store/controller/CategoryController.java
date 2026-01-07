@@ -56,7 +56,7 @@ public class CategoryController {
     @Operation(summary = "Get a category by ID", description = "Get a category with specified ID")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
         return new ResponseEntity<CategoryDto>(
-                categoryService.getById(id),
+                categoryService.findById(id),
                 HttpStatus.OK
         );
     }

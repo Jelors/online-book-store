@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -26,6 +25,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Testcontainers
@@ -83,10 +84,10 @@ class BookServiceTest {
                 .thenReturn(bookDto);
         BookDto actual = bookService.save(requestDto);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals("Kobzar", actual.getTitle());
-        Assertions.assertEquals("Taras Shevchenko", actual.getAuthor());
-        Assertions.assertEquals(BigDecimal.valueOf(24), actual.getPrice());
+        assertNotNull(actual);
+        assertEquals("Kobzar", actual.getTitle());
+        assertEquals("Taras Shevchenko", actual.getAuthor());
+        assertEquals(BigDecimal.valueOf(24), actual.getPrice());
 
     }
 
@@ -112,10 +113,10 @@ class BookServiceTest {
 
         BookDto actual = bookService.findById(1L);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
-        Assertions.assertEquals("Kobzar", actual.getTitle());
-        Assertions.assertEquals("Taras Shevchenko", actual.getAuthor());
+        assertNotNull(actual);
+        assertEquals(1L, actual.getId());
+        assertEquals("Kobzar", actual.getTitle());
+        assertEquals("Taras Shevchenko", actual.getAuthor());
     }
 
     @Test
@@ -137,8 +138,8 @@ class BookServiceTest {
 
         Page<BookDto> result = bookService.findAll(pageable);
 
-        Assertions.assertEquals(1, result.getContent().size());
-        Assertions.assertEquals(2, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        assertEquals(2, result.getTotalElements());
     }
 
     @Test
@@ -169,9 +170,9 @@ class BookServiceTest {
 
         BookDto actual = bookService.updateBookById(1L, changedBookDto);
 
-        Assertions.assertEquals(1L, actual.getId());
-        Assertions.assertEquals("The World of Ice and Fire", actual.getTitle());
-        Assertions.assertEquals("George R. R. Martin", actual.getAuthor());
+        assertEquals(1L, actual.getId());
+        assertEquals("The World of Ice and Fire", actual.getTitle());
+        assertEquals("George R. R. Martin", actual.getAuthor());
     }
 
     @Test
