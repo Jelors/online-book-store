@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @Sql(scripts = "classpath:database/books/add-items-to-categories-table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:database/books/add-three-items-to-books-table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:database/books/assign-categories-for-books.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -42,7 +43,6 @@ class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Add a new book")
     void createBook_ValidRequestDto_Success() throws Exception {
@@ -79,7 +79,6 @@ class BookControllerTest {
         );
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Find all available books")
     void findAll_ValidItems_ShouldReturnAllBooks() throws Exception {
@@ -101,7 +100,6 @@ class BookControllerTest {
         Assertions.assertEquals(3, ((List<?>) responseMap.get("content")).size());
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Returns book with right id")
     void getBookById_ValidItems_ShouldReturnBook() throws Exception {
@@ -118,7 +116,6 @@ class BookControllerTest {
         assertTrue(jsonResponse.contains("978-1909156548"));
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Updates book by id")
     void updateBookById_ValidInput_Success() throws Exception {
@@ -160,7 +157,6 @@ class BookControllerTest {
         assertEquals(expected.getCategoryIds(), actual.getCategoryIds());
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Deletes book by id")
     void deleteBookById_ValidInput_Success() throws Exception {
