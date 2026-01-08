@@ -1,2 +1,0 @@
-insert into books (id, title, author, isbn, price) values (1, 'Kobzar', 'Taras Shevchenko', '978-1909156548', 49.99);
-insert into books (id, title, author, isbn, price) values (2, 'Harry Potter', 'J. K. Rowling', '978-1408855652', 39.99);

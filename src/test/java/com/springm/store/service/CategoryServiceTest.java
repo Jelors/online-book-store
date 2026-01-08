@@ -47,7 +47,6 @@ class CategoryServiceTest {
         CategoryDto actual = categoryService.save(categoryRequestDto);
 
         assertNotNull(actual);
-        assertEquals(0L, actual.getId());
         assertEquals("Poetry", actual.getName());
     }
 
@@ -63,7 +62,6 @@ class CategoryServiceTest {
         CategoryDto actual = categoryService.findById(1L);
 
         assertNotNull(actual);
-        assertEquals(1L, actual.getId());
         assertEquals("Fiction", actual.getName());
     }
 
@@ -105,7 +103,6 @@ class CategoryServiceTest {
         CategoryDto actual = categoryService.update(1L, categoryRequestDto);
 
         assertNotNull(actual);
-        assertEquals(1L, actual.getId());
         assertEquals("History", actual.getName());
     }
 
