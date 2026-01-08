@@ -44,7 +44,7 @@ public class CategoryController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get all categories", description = "Fetch all categories")
-    public ResponseEntity<List<CategoryDto>> getAll() {
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return new ResponseEntity<List<CategoryDto>>(
                 categoryService.findAll(),
                 HttpStatus.OK
