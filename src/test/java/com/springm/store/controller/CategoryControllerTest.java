@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springm.store.dto.category.CategoryDto;
 import com.springm.store.dto.category.CreateCategoryRequestDto;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", roles = {"ADMIN"})
-@Sql(scripts = "classpath:database/books/categories/add-five-items-to-categories-table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:database/books/add-three-items-to-books-table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:database/books/assign-categories-for-books.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"classpath:database/books/categories/add-five-items-to-categories-table.sql",
+        "classpath:database/books/add-three-items-to-books-table.sql",
+        "classpath:database/books/assign-categories-for-books.sql"})
 @Sql(scripts = "classpath:database/books/clear-all-tables.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class CategoryControllerTest {
     @Autowired
@@ -63,7 +62,7 @@ class CategoryControllerTest {
 
         CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
 
-        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
     }
 
     @Test
@@ -77,17 +76,18 @@ class CategoryControllerTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString();
-        assertTrue(jsonResponse.contains("Fantasy"));
-        assertTrue(jsonResponse.contains("Classic"));
-        assertTrue(jsonResponse.contains("Poetry"));
-        assertTrue(jsonResponse.contains("History"));
-        assertTrue(jsonResponse.contains("Fantastic"));
 
-        List<CategoryDto> categoryDtos = objectMapper.readValue(
+        List<CategoryDto> actualDtos = objectMapper.readValue(
                 jsonResponse,
-                new TypeReference<List<CategoryDto>>() {}
+                new TypeReference<List<CategoryDto>>() {
+                }
         );
-        Assertions.assertEquals(5, categoryDtos.size());
+        assertEquals(5, actualDtos.size());
+        assertEquals("Fantasy", actualDtos.get(0).getName());
+        assertEquals("Classic", actualDtos.get(1).getName());
+        assertEquals("Poetry", actualDtos.get(2).getName());
+        assertEquals("History", actualDtos.get(3).getName());
+        assertEquals("Fantastic", actualDtos.get(4).getName());
     }
 
     @Test
@@ -150,10 +150,10 @@ class CategoryControllerTest {
     @DisplayName("Get all books that belong to specific category")
     void getBooksByCategoryId_ValidInput_Success() throws Exception {
         MvcResult result = mockMvc.perform(
-                get("/categories/1/books")
-                        .param("page", "0")
-                        .param("size", "5")
-                        .accept(MediaType.APPLICATION_JSON))
+                        get("/categories/1/books")
+                                .param("page", "0")
+                                .param("size", "5")
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -161,11 +161,11 @@ class CategoryControllerTest {
 
         List<CategoryDto> actual = objectMapper.readValue(
                 jsonResponse,
-                new TypeReference<List<CategoryDto>>() {}
+                new TypeReference<List<CategoryDto>>() {
+                }
         );
 
         assertEquals(3, actual.size());
     }
-
 
 }

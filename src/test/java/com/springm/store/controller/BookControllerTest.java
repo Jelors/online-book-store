@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", roles = {"ADMIN"})
-@Sql(scripts = "classpath:database/books/add-items-to-categories-table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:database/books/add-three-items-to-books-table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:database/books/assign-categories-for-books.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"classpath:database/books/add-items-to-categories-table.sql",
+        "classpath:database/books/add-three-items-to-books-table.sql",
+        "classpath:database/books/assign-categories-for-books.sql"})
 @Sql(scripts = "classpath:database/books/clear-all-tables.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class BookControllerTest {
     @Autowired
@@ -90,14 +89,21 @@ class BookControllerTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString();
-        assertTrue(jsonResponse.contains("Kobzar"));
-        assertTrue(jsonResponse.contains("Harry Potter"));
-        assertTrue(jsonResponse.contains("The Witcher"));
 
-        Map<String, Object> responseMap = objectMapper.readValue(jsonResponse, new TypeReference<>() {
-        });
-        Assertions.assertEquals(3, responseMap.get("totalElements"));
-        Assertions.assertEquals(3, ((List<?>) responseMap.get("content")).size());
+        Map<String, Object> responseMap = objectMapper.readValue(
+                jsonResponse,
+                new TypeReference<>() {
+                });
+        List<BookDto> actualDtos = objectMapper.convertValue(
+                responseMap.get("content"),
+                new TypeReference<List<BookDto>>() {
+                }
+        );
+        assertEquals("Kobzar", actualDtos.get(0).getTitle());
+        assertEquals("Harry Potter", actualDtos.get(1).getTitle());
+        assertEquals("The Witcher", actualDtos.get(2).getTitle());
+        assertEquals(3, responseMap.get("totalElements"));
+        assertEquals(3, ((List<?>) responseMap.get("content")).size());
     }
 
     @Test

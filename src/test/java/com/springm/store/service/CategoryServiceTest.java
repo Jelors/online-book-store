@@ -80,7 +80,6 @@ class CategoryServiceTest {
 
         Mockito.when(categoryRepository.findAll()).thenReturn(categories);
 
-
         List<CategoryDto> actualList = categoryService.findAll();
 
         assertEquals(2, actualList.size());

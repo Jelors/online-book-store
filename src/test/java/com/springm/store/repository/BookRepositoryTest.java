@@ -7,13 +7,13 @@ import com.springm.store.repository.category.CategoryRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @Testcontainers
@@ -46,7 +46,7 @@ class BookRepositoryTest {
 
         List<Book> actual = bookRepository.findAllByCategories_Id(1L);
 
-        Assertions.assertEquals(1, actual.size());
+        assertEquals(1, actual.size());
     }
 
     @Test
@@ -64,7 +64,7 @@ class BookRepositoryTest {
 
         List<Book> actual = bookRepository.findAllByCategories_Id(2L);
 
-        Assertions.assertEquals(0, actual.size());
+        assertEquals(0, actual.size());
     }
 
 }
