@@ -8,7 +8,7 @@ import java.util.List;
 public interface CategoryService {
     List<CategoryDto> findAll();
 
-    CategoryDto getById(Long id);
+    CategoryDto findById(Long id);
 
     CategoryDto save(CreateCategoryRequestDto createCategoryRequestDto);
 
