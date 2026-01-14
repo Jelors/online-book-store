@@ -44,7 +44,7 @@ public class CategoryController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get all categories", description = "Fetch all categories")
-    public ResponseEntity<List<CategoryDto>> getAll() {
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return new ResponseEntity<List<CategoryDto>>(
                 categoryService.findAll(),
                 HttpStatus.OK
@@ -56,7 +56,7 @@ public class CategoryController {
     @Operation(summary = "Get a category by ID", description = "Get a category with specified ID")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
         return new ResponseEntity<CategoryDto>(
-                categoryService.getById(id),
+                categoryService.findById(id),
                 HttpStatus.OK
         );
     }
