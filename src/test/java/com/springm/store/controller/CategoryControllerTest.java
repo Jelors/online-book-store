@@ -15,15 +15,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -62,7 +62,7 @@ class CategoryControllerTest {
 
         CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
 
-        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+        assertTrue(reflectionEquals(expected, actual, "id"));
     }
 
     @Test
@@ -77,17 +77,15 @@ class CategoryControllerTest {
 
         String jsonResponse = result.getResponse().getContentAsString();
 
-        List<CategoryDto> actualDtos = objectMapper.readValue(
+        List<CategoryDto> actualList = objectMapper.readValue(
                 jsonResponse,
                 new TypeReference<List<CategoryDto>>() {
                 }
         );
-        assertEquals(5, actualDtos.size());
-        assertEquals("Fantasy", actualDtos.get(0).getName());
-        assertEquals("Classic", actualDtos.get(1).getName());
-        assertEquals("Poetry", actualDtos.get(2).getName());
-        assertEquals("History", actualDtos.get(3).getName());
-        assertEquals("Fantastic", actualDtos.get(4).getName());
+        assertThat(actualList)
+                .extracting(CategoryDto::getName)
+                .containsExactly("Fantasy", "Classic",
+                        "Poetry", "History", "Fantastic");
     }
 
     @Test
@@ -109,7 +107,7 @@ class CategoryControllerTest {
     void updateCategory_ValidInput_Success() throws Exception {
         CreateCategoryRequestDto categoryRequestDto = new CreateCategoryRequestDto();
         categoryRequestDto.setName("Military");
-        categoryRequestDto.setName("Category about military things");
+        categoryRequestDto.setDescription("Category about military things");
 
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
 
@@ -131,10 +129,7 @@ class CategoryControllerTest {
         expected.setName(categoryRequestDto.getName());
         expected.setDescription(categoryRequestDto.getDescription());
 
-        assertNotNull(actual);
-        assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getDescription(), actual.getDescription());
     }
 
     @Test

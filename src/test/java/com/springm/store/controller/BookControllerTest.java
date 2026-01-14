@@ -18,15 +18,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -74,7 +74,7 @@ class BookControllerTest {
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
 
         assertTrue(
-                EqualsBuilder.reflectionEquals(expected, actual, "id")
+                reflectionEquals(expected, actual, "id")
         );
     }
 
@@ -87,23 +87,24 @@ class BookControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
+        int expectedElementsCount = 3;
         String jsonResponse = result.getResponse().getContentAsString();
 
         Map<String, Object> responseMap = objectMapper.readValue(
                 jsonResponse,
                 new TypeReference<>() {
                 });
-        List<BookDto> actualDtos = objectMapper.convertValue(
+        List<BookDto> actualList = objectMapper.convertValue(
                 responseMap.get("content"),
                 new TypeReference<List<BookDto>>() {
                 }
         );
-        assertEquals("Kobzar", actualDtos.get(0).getTitle());
-        assertEquals("Harry Potter", actualDtos.get(1).getTitle());
-        assertEquals("The Witcher", actualDtos.get(2).getTitle());
-        assertEquals(3, responseMap.get("totalElements"));
-        assertEquals(3, ((List<?>) responseMap.get("content")).size());
+
+        assertThat(actualList)
+                .extracting(BookDto::getTitle)
+                .containsExactly("Kobzar", "Harry Potter", "The Witcher");
+        assertEquals(expectedElementsCount, responseMap.get("totalElements"));
+        assertEquals(expectedElementsCount, ((List<?>) responseMap.get("content")).size());
     }
 
     @Test
@@ -155,12 +156,7 @@ class BookControllerTest {
         expected.setPrice(bookRequestDto.getPrice());
         expected.setCategoryIds(bookRequestDto.getCategoryIds());
 
-        assertNotNull(actual);
-        assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getAuthor(), actual.getAuthor());
-        assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getPrice(), actual.getPrice());
-        assertEquals(expected.getCategoryIds(), actual.getCategoryIds());
+        assertTrue(reflectionEquals(expected, actual, "id"));
     }
 
     @Test

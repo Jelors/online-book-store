@@ -10,14 +10,18 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 @SpringBootTest
 @Testcontainers
@@ -42,12 +46,15 @@ class CategoryServiceTest {
         category.setId(0L);
         category.setName("Poetry");
 
-        Mockito.when(categoryRepository.save(Mockito.any(Category.class))).thenReturn(category);
+        CategoryDto expected = new CategoryDto();
+        expected.setId(1L);
+        expected.setName("Poetry");
+
+        when(categoryRepository.save(any(Category.class))).thenReturn(category);
 
         CategoryDto actual = categoryService.save(categoryRequestDto);
 
-        assertNotNull(actual);
-        assertEquals("Poetry", actual.getName());
+        assertTrue(reflectionEquals(expected, actual, "id"));
     }
 
     @Test
@@ -57,12 +64,15 @@ class CategoryServiceTest {
         category.setId(1L);
         category.setName("Fiction");
 
-        Mockito.when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+
+        CategoryDto expected = new CategoryDto();
+        expected.setId(1L);
+        expected.setName("Fiction");
 
         CategoryDto actual = categoryService.findById(1L);
 
-        assertNotNull(actual);
-        assertEquals("Fiction", actual.getName());
+        assertTrue(reflectionEquals(expected, actual, "id"));
     }
 
     @Test
@@ -78,13 +88,13 @@ class CategoryServiceTest {
 
         List<Category> categories = List.of(category1, category2);
 
-        Mockito.when(categoryRepository.findAll()).thenReturn(categories);
+        when(categoryRepository.findAll()).thenReturn(categories);
 
         List<CategoryDto> actualList = categoryService.findAll();
 
-        assertEquals(2, actualList.size());
-        assertEquals("Poetry", actualList.get(0).getName());
-        assertEquals("Fiction", actualList.get(1).getName());
+        assertThat(actualList)
+                .extracting(CategoryDto::getName)
+                .containsExactly("Poetry", "Fiction");
     }
 
     @Test
@@ -94,25 +104,27 @@ class CategoryServiceTest {
         category.setId(1L);
         category.setName("Fiction");
 
-        Mockito.when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
         CreateCategoryRequestDto categoryRequestDto = new CreateCategoryRequestDto();
         categoryRequestDto.setName("History");
 
+        CategoryDto expected = new CategoryDto();
+        expected.setName("History");
+
         CategoryDto actual = categoryService.update(1L, categoryRequestDto);
 
-        assertNotNull(actual);
-        assertEquals("History", actual.getName());
+        assertTrue(reflectionEquals(expected, actual, "id"));
     }
 
     @Test
     @DisplayName("Deletes category by id")
     void deleteById_ValidInput_Success() {
-        Mockito.doNothing().when(categoryRepository).deleteById(1L);
+        doNothing().when(categoryRepository).deleteById(1L);
 
         categoryService.deleteById(1L);
 
-        Mockito.verify(categoryRepository).deleteById(1L);
+        verify(categoryRepository).deleteById(1L);
     }
 
 }

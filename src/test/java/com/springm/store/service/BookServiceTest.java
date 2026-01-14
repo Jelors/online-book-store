@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,10 +24,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 @SpringBootTest
 @Testcontainers
@@ -56,7 +58,7 @@ class BookServiceTest {
         category.setId(1L);
         category.setName("Poetry");
 
-        Mockito.when(categoryRepository.findById(1L))
+        when(categoryRepository.findById(1L))
                 .thenReturn(Optional.of(category));
 
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
@@ -69,24 +71,25 @@ class BookServiceTest {
         bookEntity.setTitle("Kobzar");
         bookEntity.setAuthor("Taras Shevchenko");
         bookEntity.setPrice(BigDecimal.valueOf(24));
+        bookEntity.setCategories(Set.of(category));
 
-        BookDto bookDto = new BookDto();
-        bookDto.setTitle("Kobzar");
-        bookDto.setAuthor("Taras Shevchenko");
-        bookDto.setPrice(BigDecimal.valueOf(24));
-        bookDto.setCategoryIds(Set.of(1L));
+        BookDto expected = new BookDto();
+        expected.setTitle(bookEntity.getTitle());
+        expected.setAuthor(bookEntity.getAuthor());
+        expected.setPrice(bookEntity.getPrice());
+        expected.setCategoryIds(requestDto.getCategoryIds());
 
-        Mockito.when(bookMapper.toModel(Mockito.any(CreateBookRequestDto.class)))
+        when(bookMapper.toModel(any(CreateBookRequestDto.class)))
                 .thenReturn(bookEntity);
 
-        Mockito.when(bookRepository.save(Mockito.any(Book.class)))
+        when(bookRepository.save(any(Book.class)))
                 .thenReturn(bookEntity);
 
-        Mockito.when(bookMapper.toDto(Mockito.any(Book.class)))
-                .thenReturn(bookDto);
+        when(bookMapper.toDto(any(Book.class)))
+                .thenReturn(expected);
         BookDto actual = bookService.save(requestDto);
 
-        EqualsBuilder.reflectionEquals(bookEntity, actual, "id");
+        assertTrue(reflectionEquals(expected, actual, "id"));
 
     }
 
@@ -104,18 +107,15 @@ class BookServiceTest {
         bookDto.setTitle("Kobzar");
         bookDto.setAuthor("Taras Shevchenko");
 
-        Mockito.when(bookRepository.findById(1L))
+        when(bookRepository.findById(1L))
                 .thenReturn(Optional.of(bookEntity));
 
-        Mockito.when(bookMapper.toDto(bookEntity))
+        when(bookMapper.toDto(bookEntity))
                 .thenReturn(bookDto);
 
         BookDto actual = bookService.findById(1L);
 
-        assertNotNull(actual);
-        assertNotNull(actual.getId());
-        assertEquals("Kobzar", actual.getTitle());
-        assertEquals("Taras Shevchenko", actual.getAuthor());
+        assertTrue(reflectionEquals(bookDto, actual, "id"));
     }
 
     @Test
@@ -129,10 +129,10 @@ class BookServiceTest {
         Page<Book> bookPage =
                 new PageImpl<>(List.of(book), pageable, 2);
 
-        Mockito.when(bookRepository.findAll(pageable))
+        when(bookRepository.findAll(pageable))
                 .thenReturn(bookPage);
 
-        Mockito.when(bookMapper.toDto(book))
+        when(bookMapper.toDto(book))
                 .thenReturn(new BookDto());
 
         Page<BookDto> result = bookService.findAll(pageable);
@@ -149,42 +149,36 @@ class BookServiceTest {
         bookEntity.setTitle("Harry Potter");
         bookEntity.setAuthor("J. K. Rowling");
 
-
-        Mockito.when(bookRepository.findById(1L))
+        when(bookRepository.findById(1L))
                 .thenReturn(Optional.of(bookEntity));
 
         CreateBookRequestDto changedBookDto = new CreateBookRequestDto();
         changedBookDto.setTitle("The World of Ice and Fire");
         changedBookDto.setAuthor("George R. R. Martin");
 
-
         BookDto bookDto = new BookDto();
         bookDto.setId(1L);
         bookDto.setTitle("The World of Ice and Fire");
         bookDto.setAuthor("George R. R. Martin");
 
-
-        Mockito.when(bookMapper.toDto(bookEntity))
+        when(bookMapper.toDto(bookEntity))
                 .thenReturn(bookDto);
 
         BookDto actual = bookService.updateBookById(1L, changedBookDto);
 
-        assertNotNull(actual);
-        assertNotNull(actual.getId());
-        assertEquals("The World of Ice and Fire", actual.getTitle());
-        assertEquals("George R. R. Martin", actual.getAuthor());
+        assertTrue(reflectionEquals(bookDto, actual, "id"));
     }
 
     @Test
     @DisplayName("Deletes books with valid id")
     void deleteBookById_ValidInput_Success() {
-        Mockito.doNothing()
+        doNothing()
                 .when(bookRepository)
                 .deleteById(1L);
 
         bookService.deleteBookById(1L);
 
-        Mockito.verify(bookRepository)
+        verify(bookRepository)
                 .deleteById(1L);
     }
 
