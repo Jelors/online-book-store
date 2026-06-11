@@ -1,4 +1,4 @@
-# 📚 Online Book Store
+# 📚 Libre API
 
 This is a modern RESTful API for an online book store, developed on the basis of **Spring Boot**. The project implements
 a full cycle of working with books: from browsing the catalog to securely placing orders through the cart.
